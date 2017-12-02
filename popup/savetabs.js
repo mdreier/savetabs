@@ -145,9 +145,14 @@ class SaveTabs
 	 */
 	_storeUrls(urls)
 	{
-		return browser.storage.local.set({
-			[SAVED_TABS_KEY]: urls
-		});
+		if (Array.isArray(urls) && urls.length > 0)
+		{
+			return browser.storage.local.set({
+				[SAVED_TABS_KEY]: urls
+			});
+		} else {
+			return Promise.reject("No tabs selected for saving");
+		}
 	}
 	
 	/**
