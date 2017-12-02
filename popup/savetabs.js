@@ -117,7 +117,6 @@ class SaveTabs
 	 */
 	_translateMenuItem(element, textKey)
 	{
-		console.log("Translating", element);
 		if (element && element.textContent)
 		{
 			element.innerHTML = browser.i18n.getMessage(textKey);
@@ -215,7 +214,6 @@ class SaveTabs
 	{
 		for (let tab of openTabs)
 		{
-			console.log("Opening:", url, "; current:", tab.url);
 			if (tab.url === url)
 			{
 				return true;
