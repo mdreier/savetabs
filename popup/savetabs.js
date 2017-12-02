@@ -52,7 +52,7 @@ class SaveTabs
 		console.log("Loading tabs");
 		browser.storage.local
 			.get([ SAVED_TABS_KEY ])
-			.then(this._loadUrls)
+			.then(this._loadUrls.bind(this))
 			.then(() => console.log("Tabs restored"))
 			.then(() => window.close())
 			.catch(this._handleError);
@@ -186,19 +186,44 @@ class SaveTabs
 	 */
 	_loadUrls(savedTabs)
 	{
-		if (savedTabs[SAVED_TABS_KEY] && Array.isArray(savedTabs[SAVED_TABS_KEY]))
-		{
-			let newTabPromises = [];
-			for (let url of savedTabs[SAVED_TABS_KEY])
+		return browser.tabs.query({ currentWindow: true }).then( (openTabs) => {
+			if (savedTabs[SAVED_TABS_KEY] && Array.isArray(savedTabs[SAVED_TABS_KEY]))
 			{
-				newTabPromises.push(browser.tabs.create({ url: url }));
+				let newTabPromises = [];
+				for (let url of savedTabs[SAVED_TABS_KEY])
+				{
+					if (!this._isOpen(openTabs, url))
+					{
+						newTabPromises.push(browser.tabs.create({ url: url }));
+					}
+				}
+				return Promise.all(newTabPromises);
+			} else {
+				return Promise.reject("No saved tabs");
 			}
-			return Promise.all(newTabPromises);
-		} else {
-			return Promise.reject("No saved tabs");
-		}
+		});
 	}
-	
+
+	/**
+	 * Check if a URL is opened in a tab.
+	 * @param {array} openTabs Currently opened tabs, an array of <code>tab.Tab</code>.
+	 * @param {string} url The URL to check.
+	 * @return {boolean} <code>true</code> if the url is open in a tab, <code>false</code>
+	 * if it is not open.
+	 */
+	_isOpen(openTabs, url)
+	{
+		for (let tab of openTabs)
+		{
+			console.log("Opening:", url, "; current:", tab.url);
+			if (tab.url === url)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Log an error to the browser console and close the popup window.
 	 * @param {any} error Error to be logged.
