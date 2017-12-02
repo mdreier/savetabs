@@ -1,0 +1,23 @@
+{
+	"manifest_version": 2,
+	"name": "SaveTabs",
+	"version": "1.0",
+
+	"description": "Save your open tabs locally and restore the previously saved tabs.",
+	"homepage_url": "https://github.com/mdreier/...",
+	"icons": {
+		"48": "icons/savetabs-48.png",
+		"96": "icons/savetabs-96.png"
+	},
+	
+
+	"permissions": [
+		"tabs"
+	],
+
+	"browser_action": {
+		"default_icon": "icons/savetabs-32.png",
+		"default_title": "Save Tabs",
+		"default_popup": "popup/savetabs.html"
+	}
+}
