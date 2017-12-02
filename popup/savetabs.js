@@ -4,6 +4,21 @@
 const SAVED_TABS_KEY = "savedTabs";
 
 /**
+ * Priviledged URls which cannot be opened from extensions.
+ * See the documentation for <code>createProperties.url</code> in
+ * <a href="https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/tabs/create"><code>tabs.create()</code></a>
+ * for more information.
+ */
+const NON_SAVEABLE_URLS = [
+	"about:config",
+	"about:addons",
+	"about:debugging",
+	"about:reader",
+	"about:downloads",
+	"about:blank"
+];
+
+/**
  * Class to handle saving and storing of tabs.
  */
 class SaveTabs
@@ -97,7 +112,7 @@ class SaveTabs
 	{
 		browser.tabs
 			.query(tabQuery)
-			.then(this._collectUrls)
+			.then(this._collectUrls.bind(this))
 			.then(this._storeUrls)
 			.then(() => console.log("Tabs saved"))
 			.then(() => window.close())
@@ -114,7 +129,10 @@ class SaveTabs
 		let urls = [];
 		for (let tab of tabs)
 		{
-			urls.push(tab.url);
+			if (this._isSaveable(tab))
+			{
+				urls.push(tab.url);
+			}
 		}
 		return urls;
 	}
@@ -162,6 +180,51 @@ class SaveTabs
 	{
 		console.error("Error in SaveTabs: ", error);
 		window.close()
+	}
+
+	/**
+	 * Check if a tab can be saved. Pinned tabs and those with unopenable protocols
+	 * are not stored. See the documentation for <code>createProperties.url</code> in
+	 * <a href="https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/tabs/create"><code>tabs.create()</code></a>
+	 * for more information about non-openable URL protocols.
+	 * @param {tabs.Tab} tab Tab to be ckecked.
+	 * @return {boolean} <code>true</code> if the tab can be saved, <code>false</code> otherwise.
+	 */
+	_isSaveable(tab)
+	{
+		if (tab.pinned)
+		{
+			//Pinned tabs should not be saved.
+			return false;
+		}
+		//Some URLs cannot be opened and therefor not be saved
+		if (NON_SAVEABLE_URLS.includes(tab.url))
+		{
+			return false;
+		}
+		//Not all protocols may be saved
+		let protocol = tab.url.split(':', 1)[0];
+		switch(protocol)
+		{
+			//Safe protocols
+			case 'http':
+			case 'https':
+			case 'ftp':
+			case 'about':
+				return true;
+			//Unsavable protocols
+			case 'chrome':
+			case 'javascript':
+			case 'data':
+			case 'file':
+				return false;
+			//No protocol specified
+			case '':
+				return false;
+			//Unknown protocols
+			default:
+				return false;
+		}
 	}
 }
 
