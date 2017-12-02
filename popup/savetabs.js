@@ -100,8 +100,30 @@ class SaveTabs
 					break;
 			}
 		});
+		
+		//Translate UI once document has finished loading
+		window.addEventListener("load", (e) => {
+			saveTabsInstance._translateMenuItem(document.getElementById(saveCurrentTabId), "saveCurrentTab");
+			saveTabsInstance._translateMenuItem(document.getElementById(saveAllTabsId), "saveAllTabs");
+			saveTabsInstance._translateMenuItem(document.getElementById(loadTabsId), "loadSavedTabs");
+			saveTabsInstance._translateMenuItem(document.getElementById(deleteTabsId), "deleteSavedTabs");
+		});
 	}
-	
+
+	/**
+	 * Translate a menu item.
+	 * @param {DOMElement} element HTML element representing the menu item.
+	 * @param {string} textKey Key of the translated text.
+	 */
+	_translateMenuItem(element, textKey)
+	{
+		console.log("Translating", element);
+		if (element && element.textContent)
+		{
+			element.innerHTML = browser.i18n.getMessage(textKey);
+		}
+	}
+
 	/**
 	 * Save all tabs found with the given query.
 	 * @param {object} tabQuery Query to select tabs to be saved. See the

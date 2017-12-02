@@ -1,12 +1,14 @@
 {
 	"manifest_version": 2,
-	"name": "SaveTabs",
+	"name": "__MSG_extensionName__",
 	"version": "1.0",
 
-	"description": "Save your open tabs locally and restore the previously saved tabs.",
+	"description": "__MSG_extensionDescription__",
 	"author": "Martin Dreier",
 	"homepage_url": "https://github.com/mdreier/savetabs",
 	
+	"default_locale": "en",
+
 	"applications": {
 		"gecko": {
 			"id": "savetabs@martindreier.de"
@@ -27,7 +29,7 @@
 
 	"browser_action": {
 		"default_icon": "icons/savetabs-32.png",
-		"default_title": "Save Tabs",
+		"default_title": "__MSG_popupTitle__",
 		"default_popup": "popup/savetabs.html",
 		"browser_style": true
 	}
