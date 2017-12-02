@@ -1,0 +1,36 @@
+{
+  "extensionName": {
+    "message": "SaveTabs",
+    "description": "Name of the SaveTabs extension."
+  },
+
+  "extensionDescription": {
+    "message": "Save your open tabs locally and restore the previously saved tabs.",
+    "description": "Description of the SaveTabs extension."
+  },
+
+  "popupTitle": {
+    "message": "Tabs sichern",
+    "description": "Title of the click notification."
+  },
+  
+  "saveCurrentTab": {
+    "message": "Aktuelles Tab sichern",
+    "description": "Menu entry to save the current tab."
+  },
+  
+  "saveAllTabs": {
+    "message": "Alle Tabs sichern",
+    "description": "Menu entry to save all tabs in the current window."
+  },
+  
+  "loadSavedTabs": {
+    "message": "Gesicherte Tabs wiederherstellen",
+    "description": "Menu entry to load and restore all saved tabs."
+  },
+  
+  "deleteSavedTabs": {
+    "message": "Gesicherte Tabs löschen",
+    "description": "Menu entry to delete all saved tabs from the local storage."
+  }
+}
