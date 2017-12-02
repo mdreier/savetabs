@@ -4,7 +4,9 @@
 	"version": "1.0",
 
 	"description": "Save your open tabs locally and restore the previously saved tabs.",
+	"author": "Martin Dreier",
 	"homepage_url": "https://github.com/mdreier/savetabs",
+	
 	"icons": {
 		"48": "icons/savetabs-48.png",
 		"96": "icons/savetabs-96.png"
