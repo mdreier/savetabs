@@ -7,6 +7,12 @@
 	"author": "Martin Dreier",
 	"homepage_url": "https://github.com/mdreier/savetabs",
 	
+	"applications": {
+		"gecko": {
+			"id": "savetabs@martindreier.de"
+		}
+	},
+
 	"icons": {
 		"48": "icons/savetabs-48.png",
 		"96": "icons/savetabs-96.png"
