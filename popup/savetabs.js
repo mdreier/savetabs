@@ -40,7 +40,7 @@ class SaveTabs
 			.then(this._loadUrls)
 			.then(() => console.log("Tabs restored"))
 			.then(() => window.close())
-			.catch(this._logError);
+			.catch(this._handleError);
 	}
 	
 	/**
@@ -53,7 +53,7 @@ class SaveTabs
 			.remove([ SAVED_TABS_KEY ])
 			.then(() => console.log("Tabs deleted"))
 			.then(() => window.close())
-			.catch(this._logError);
+			.catch(this._handleError);
 	}
 	
 	/**
@@ -101,7 +101,7 @@ class SaveTabs
 			.then(this._storeUrls)
 			.then(() => console.log("Tabs saved"))
 			.then(() => window.close())
-			.catch(this._logError);
+			.catch(this._handleError);
 	}
 	
 	/**
@@ -155,12 +155,13 @@ class SaveTabs
 	}
 	
 	/**
-	 * Log an error to the browser console.
+	 * Log an error to the browser console and close the popup window.
 	 * @param {any} error Error to be logged.
 	 */
-	_logError(error)
+	_handleError(error)
 	{
 		console.error("Error in SaveTabs: ", error);
+		window.close()
 	}
 }
 
