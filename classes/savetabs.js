@@ -100,27 +100,6 @@ class SaveTabs
 					break;
 			}
 		});
-		
-		//Translate UI once document has finished loading
-		window.addEventListener("load", (e) => {
-			saveTabsInstance._translateMenuItem(document.getElementById(saveCurrentTabId), "saveCurrentTab");
-			saveTabsInstance._translateMenuItem(document.getElementById(saveAllTabsId), "saveAllTabs");
-			saveTabsInstance._translateMenuItem(document.getElementById(loadTabsId), "loadSavedTabs");
-			saveTabsInstance._translateMenuItem(document.getElementById(deleteTabsId), "deleteSavedTabs");
-		});
-	}
-
-	/**
-	 * Translate a menu item.
-	 * @param {DOMElement} element HTML element representing the menu item.
-	 * @param {string} textKey Key of the translated text.
-	 */
-	_translateMenuItem(element, textKey)
-	{
-		if (element && element.textContent)
-		{
-			element.innerHTML = browser.i18n.getMessage(textKey);
-		}
 	}
 
 	/**
@@ -277,5 +256,3 @@ class SaveTabs
 		}
 	}
 }
-
-SaveTabs.createHooks(document);
