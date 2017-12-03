@@ -3,6 +3,8 @@
 The SaveTabs extension allows you to save your open tabs locally and restore them at
 a later time, even after restarting the browser.
 
+![Screenshot of the menu in the toolbar](img/screenshot.png)
+
 ## Installation
 
 The extension is available on [addons.mozilla.org (AMO)](https://addons.mozilla.org/de/firefox/addon/savetabs) 
