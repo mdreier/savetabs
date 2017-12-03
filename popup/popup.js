@@ -1,0 +1,1 @@
+SaveTabs.createHooks(document);
