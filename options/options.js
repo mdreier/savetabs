@@ -88,7 +88,7 @@ class SavetabsOptions
     {
         this._updateRadioSet(this._settings.singleTabOverwrite, "stsetting-single-overwrite", "stsetting-single-append");
         this._updateRadioSet(this._settings.multiTabOverwrite, "stsetting-multi-overwrite", "stsetting-multi-append");
-        this._updateRadioSet((this._settings.skipUnknownProtocols, "stsetting-unknown-skip", "stsetting-unknown-store");
+        this._updateRadioSet(this._settings.skipUnknownProtocols, "stsetting-unknown-skip", "stsetting-unknown-store");
     }
 
     /**
