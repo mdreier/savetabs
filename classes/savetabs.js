@@ -4,6 +4,11 @@
 const SAVED_TABS_KEY = "savedTabs";
 
 /**
+ * Key for settings in local storage.
+ */
+const SETTINGS_KEY = "settings";
+
+/**
  * Priviledged URls which cannot be opened from extensions.
  * See the documentation for <code>createProperties.url</code> in
  * <a href="https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/tabs/create"><code>tabs.create()</code></a>
@@ -51,7 +56,7 @@ class SaveTabs
 	{
 		console.log("Loading tabs");
 		browser.storage.local
-			.get([ SAVED_TABS_KEY ])
+			.get([ SAVED_TABS_KEY, SETTINGS_KEY ])
 			.then(this._loadUrls.bind(this))
 			.then(() => console.log("Tabs restored"))
 			.then(() => window.close())
@@ -110,9 +115,10 @@ class SaveTabs
 	 */
 	_saveTabs(tabQuery)
 	{
-		browser.tabs
-			.query(tabQuery)
+		this._loadSettings()
+			.then(() => browser.tabs.query(tabQuery))
 			.then(this._collectUrls.bind(this))
+			.then(this._addStoredUrls.bind(this))
 			.then(this._storeUrls)
 			.then(() => console.log("Tabs saved"))
 			.then(() => window.close())
@@ -137,6 +143,40 @@ class SaveTabs
 		return urls;
 	}
 	
+	/**
+	 * Add currently stored URLs to the list of URLs to be saved if required by settings.
+	 * @param {array} urls URLs to be saved.
+	 * @return {Promise} Promise which is resolved with the correct list of URLs to be saved.
+	 */
+	_addStoredUrls(urls)
+	{
+		if (Array.isArray(urls) && urls.length > 0)
+		{
+			if (urls.length === 1 && this._settings.singleTabOverwrite)
+			{
+				//Single tab stored and overwriting is active
+				return Promise.resolve(urls);
+			}
+			else if (urls.length > 1 && this._settings.multiTabOverwrite)
+			{
+				//Multiple tabs stored and overwriting is active
+				return Promise.resolve(urls);
+			}
+			else
+			{
+				//Overwriting is not active, read and combine currently stored
+				// tabs before saving.
+				return browser.storage.local.get([SAVED_TABS_KEY])
+					.then(data => data[SAVED_TABS_KEY] && Array.isArray(data[SAVED_TABS_KEY]) ? data[SAVED_TABS_KEY] : [])
+					.then(savedUrls => savedUrls.concat(urls));
+			}
+		}
+		else
+		{
+			return Promise.resolve(urls);
+		}
+	}
+
 	/**
 	 * Collect the URLs opened in the selected tabs.
 	 * @param {array} urls URLs to be saved.
@@ -202,12 +242,27 @@ class SaveTabs
 	}
 
 	/**
+	 * Load settings from local storage.
+	 * @returns {object} Promise which will be resolved with the settings once they are loaded.
+	 */
+	_loadSettings()
+	{
+		return browser.storage.local.get([SETTINGS_KEY])
+			.then(data => data[SETTINGS_KEY] ? data[SETTINGS_KEY] : {})
+			.then(settings => this._settings = settings);
+	}
+
+	/**
 	 * Log an error to the browser console and close the popup window.
 	 * @param {any} error Error to be logged.
 	 */
 	_handleError(error)
 	{
 		console.error("Error in SaveTabs: ", error);
+		if (error)
+		{
+			console.debug(error);
+		}
 		window.close()
 	}
 
