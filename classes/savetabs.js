@@ -308,7 +308,7 @@ class SaveTabs
 				return false;
 			//Unknown protocols
 			default:
-				return false;
+				return !this._settings.skipUnknownProtocols;
 		}
 	}
 }

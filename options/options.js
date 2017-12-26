@@ -3,7 +3,8 @@
  */
 const DEFAULT_SETTINGS = {
     singleTabOverwrite: true,
-    multiTabOverwrite: true
+    multiTabOverwrite: true,
+    skipUnknownProtocols: true
 };
 
 /**
@@ -48,6 +49,7 @@ class SavetabsOptions
     {
         this._updateFromRadioSet("singleTabOverwrite", "stsetting-single-overwrite", "stsetting-single-append");
         this._updateFromRadioSet("multiTabOverwrite", "stsetting-multi-overwrite", "stsetting-multi-append");
+        this._updateFromRadioSet("skipUnknownProtocols", "stsetting-unknown-skip", "stsetting-unknown-store");
         return Promise.resolve(this._settings);
     }
 
@@ -86,6 +88,7 @@ class SavetabsOptions
     {
         this._updateRadioSet(this._settings.singleTabOverwrite, "stsetting-single-overwrite", "stsetting-single-append");
         this._updateRadioSet(this._settings.multiTabOverwrite, "stsetting-multi-overwrite", "stsetting-multi-append");
+        this._updateRadioSet((this._settings.skipUnknownProtocols, "stsetting-unknown-skip", "stsetting-unknown-store");
     }
 
     /**
@@ -151,6 +154,14 @@ class SavetabsOptions
     }
 }
 
+function showExpertSettings()
+{
+    document.querySelectorAll(".expertsetting").forEach(elem => elem.style.display = "block");
+    document.querySelector("#showexpertsettings").style.display = "none";
+}
+
 let options = new SavetabsOptions();
 document.addEventListener("DOMContentLoaded", options.restore.bind(options));
 document.querySelector("form").addEventListener("click", options.update.bind(options));
+
+document.querySelector("#showexpertsettings").addEventListener("click", showExpertSettings);

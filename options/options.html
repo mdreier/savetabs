@@ -3,6 +3,11 @@
 
     <head>
         <meta charset="utf-8">
+        <style>
+            .expertsetting {
+                display: none;
+            }
+        </style>
     </head>
 
     <body>
@@ -26,6 +31,31 @@
                 <br />
                 <input type="radio" id="stsetting-multi-append" name="setting-multi" value="append" />
                 <label for="stsetting-multi-append">append to currently stored tabs</label>
+            </fieldset>
+
+            <div id="showexpertsettings">Show expert settings</div>
+
+            <fieldset class="expertsetting">
+                <legend>When storing a tab with an unknown protocol...</legend>
+
+                <input type="radio" id="stsetting-unknown-store" name="setting-unknown" value="store" />
+                <label for="stsetting-unknown-store">store the tab</label>
+                <br />
+                <input type="radio" id="stsetting-unknown-skip" name="setting-unknown" value="skip" />
+                <label for="stsetting-multi-skip">skip the tab</label>
+                <p>
+                    Some protocols cannot be restored from saved tabs due to browser restrictions. This
+                    includes <code>chrome:</code>, <code>data:</code>, <code>file:</code>, 
+                    <code>javascript:</code> and some <code>about:</code> URLs. These URLs are never
+                    stored.<br />
+                    This setting controls what the addon will do when it encounters a URL for which it
+                    does not know wether it can be restored or not. You can choose to store the tab
+                    anyways (but it could be that it is not restored) or you can choose to skip the tab
+                    while saving (and thereby saving some storage space). You only need this setting
+                    when you have installed an extension which adds support for a new protocol.<br />
+                    <strong>Hint:</strong> If you do not understand the previous paragraphs, just keep the
+                    setting on its default value (skip).
+                </p>
             </fieldset>
         </form>
 
