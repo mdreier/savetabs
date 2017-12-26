@@ -2,7 +2,8 @@
  * Default settings.
  */
 const DEFAULT_SETTINGS = {
-    singleTabOverwrite: false
+    singleTabOverwrite: true,
+    multiTabOverwrite: true
 };
 
 /**
@@ -46,6 +47,7 @@ class SavetabsOptions
     _updateSettings()
     {
         this._updateFromRadioSet("singleTabOverwrite", "stsetting-single-overwrite", "stsetting-single-append");
+        this._updateFromRadioSet("multiTabOverwrite", "stsetting-multi-overwrite", "stsetting-multi-append");
         return Promise.resolve(this._settings);
     }
 
@@ -83,6 +85,7 @@ class SavetabsOptions
     _updateUI()
     {
         this._updateRadioSet(this._settings.singleTabOverwrite, "stsetting-single-overwrite", "stsetting-single-append");
+        this._updateRadioSet(this._settings.multiTabOverwrite, "stsetting-multi-overwrite", "stsetting-multi-append");
     }
 
     /**
