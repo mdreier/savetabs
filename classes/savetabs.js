@@ -113,6 +113,7 @@ class SaveTabs
 		browser.tabs
 			.query(tabQuery)
 			.then(this._collectUrls.bind(this))
+			.then(urls => urls.filter((elem, index, arr) => arr.indexOf(elem) == index)) //remove duplicate URLs
 			.then(this._storeUrls)
 			.then(() => console.log("Tabs saved"))
 			.then(() => window.close())
