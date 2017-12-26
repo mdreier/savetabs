@@ -3,11 +3,7 @@
 
     <head>
         <meta charset="utf-8">
-        <style>
-            .expertsetting {
-                display: none;
-            }
-        </style>
+        <link rel="stylesheet" href="options.css">
     </head>
 
     <body>
@@ -16,21 +12,56 @@
             <fieldset>
                 <legend>When storing a single tab...</legend>
 
-                <input type="radio" id="stsetting-single-overwrite" name="setting-single" value="overwrite" />
+                <input type="radio" class="stsetting" id="stsetting-single-overwrite" name="setting-single" value="overwrite" />
                 <label for="stsetting-single-overwrite">overwrite currently stored tabs</label>
                 <br />
-                <input type="radio" id="stsetting-single-append" name="setting-single" value="append" />
+                <input type="radio" class="stsetting" id="stsetting-single-append" name="setting-single" value="append" />
                 <label for="stsetting-single-append">append to currently stored tabs</label>
             </fieldset>
 
             <fieldset>
                 <legend>When storing multiple tabs...</legend>
 
-                <input type="radio" id="stsetting-multi-overwrite" name="setting-multi" value="overwrite" />
+                <input type="radio" class="stsetting" id="stsetting-multi-overwrite" name="setting-multi" value="overwrite" />
                 <label for="stsetting-multi-overwrite">overwrite currently stored tabs</label>
                 <br />
-                <input type="radio" id="stsetting-multi-append" name="setting-multi" value="append" />
+                <input type="radio" class="stsetting" id="stsetting-multi-append" name="setting-multi" value="append" />
                 <label for="stsetting-multi-append">append to currently stored tabs</label>
+            </fieldset>
+
+            <fieldset>
+                <legend>Tab Groups</legend>
+
+                <p>
+                    Use tab groups to store multiple sets of tabs. Tab groups are only shown on the UI
+                    if more than one group is defined.
+                    <br />
+                    You must have at least one tab group and one tab group must be marked as the default
+                    tab group.
+                </p>
+
+                <select id="stsetting-tabgroups" size="5">
+                </select>
+
+                <p>* marks the default tab group</p>
+
+                <p id="grouperror"></p>
+
+                <div id="groupcontrols">
+                    <button id="addgroup">Add group...</button>
+                    <button id="setdefaultgroup">Set as default</button>
+                    <button id="deletegroup">Delete group</button>
+                </div>
+
+                <div id="addgroupdata">
+                    <p>Name of the new group:
+                        <input id="groupname">
+                        <span>
+                            <button id="savegroup">Save</button>
+                            <button id="canceladdgroup">Cancel</button>
+                        </span>
+                    </p>
+                </div>
             </fieldset>
 
             <div id="showexpertsettings">Show expert settings</div>
@@ -38,10 +69,10 @@
             <fieldset class="expertsetting">
                 <legend>When storing a tab with an unknown protocol...</legend>
 
-                <input type="radio" id="stsetting-unknown-store" name="setting-unknown" value="store" />
+                <input type="radio" class="stsetting" id="stsetting-unknown-store" name="setting-unknown" value="store" />
                 <label for="stsetting-unknown-store">store the tab</label>
                 <br />
-                <input type="radio" id="stsetting-unknown-skip" name="setting-unknown" value="skip" />
+                <input type="radio" class="stsetting" id="stsetting-unknown-skip" name="setting-unknown" value="skip" />
                 <label for="stsetting-multi-skip">skip the tab</label>
                 <p>
                     Some protocols cannot be restored from saved tabs due to browser restrictions. This

@@ -32,5 +32,15 @@
   "deleteSavedTabs": {
     "message": "Gesicherte Tabs löschen",
     "description": "Menu entry to delete all saved tabs from the local storage."
+  },
+
+  "enterTabGroupName": {
+    "message": "Gib einen Namen für die neue Tabgruppe ein",
+    "description": "Error message shown when the name is missing for a new tab group"
+  },
+
+  "noGroupSelected": {
+    "message": "Keine Tabgruppe ausgewählt",
+    "description": "Error message shown when no tab group is selected during an operation which requires a selected group"
   }
 }
