@@ -35,5 +35,7 @@
 		"default_title": "__MSG_popupTitle__",
 		"default_popup": "popup/savetabs.html",
 		"browser_style": true
-	}
+	},
+
+	"content_security_policy": "default-src 'self' 'unsafe-eval'"
 }
