@@ -75,37 +75,6 @@ class SaveTabs
 			.then(() => window.close())
 			.catch(this._handleError);
 	}
-	
-	/**
-	 * Create an event handler for the SaveTabs popup. The event handler reacts to clicks on the specified controls.
-	 *
-	 * @param {Document} document The current page shown in the popup.
-	 * @param {SaveTabs} saveTabsInstance Instance of <code>SaveTabs</code> to handle the callbacks. Defaults to a new instance.
-	 * @param {string} saveCurrentTabId ID of the control which triggers saving of the current tab.
-	 * @param {string} saveAllTabsId ID of the control which triggers saving of all tabs in the current window.
-	 * @param {string} loadTabsId ID of the control which triggers loading of saved tabs.
-	 * @param {string} deleteSavedTabs ID of the control which triggers deletion of saved tabs.
-	 */
-	static createHooks(document, saveTabsInstance = new SaveTabs(), saveCurrentTabId = "saveCurrentTab", saveAllTabsId = "saveAllTabs", loadTabsId = "loadSavedTabs", deleteTabsId = "deleteSavedTabs")
-	{
-		document.addEventListener("click", (e) => {
-			switch (e.target.id)
-			{
-				case saveCurrentTabId:
-					saveTabsInstance.saveCurrentTab();
-					break;
-				case saveAllTabsId:
-					saveTabsInstance.saveAllTabs();
-					break;
-				case loadTabsId:
-					saveTabsInstance.loadTabs();
-					break;
-				case deleteTabsId:
-					saveTabsInstance.deleteTabs();
-					break;
-			}
-		});
-	}
 
 	/**
 	 * Save all tabs found with the given query.

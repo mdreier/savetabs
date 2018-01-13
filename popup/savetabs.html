@@ -10,12 +10,12 @@
 	<body>
 		<div id="popup-content" class="panel">
 			<div class="panel-section panel-section-list">
-				<savetabs-list-item id="saveCurrentTab" icon="tab.png"></savetabs-list-item>
-				<savetabs-list-item id="saveAllTabs" icon="tabs.png"></savetabs-list-item>
+				<savetabs-list-item id="saveCurrentTab" icon="tab.png" :save-tabs="saveTabs"></savetabs-list-item>
+				<savetabs-list-item id="saveAllTabs" icon="tabs.png" :save-tabs="saveTabs"></savetabs-list-item>
 				<savetabs-separator></savetabs-separator>
-				<savetabs-list-item id="loadSavedTabs" icon="restore.png"></savetabs-list-item>
+				<savetabs-list-item id="loadSavedTabs" icon="restore.png" :save-tabs="saveTabs"></savetabs-list-item>
 				<savetabs-separator></savetabs-separator>
-				<savetabs-list-item id="deleteSavedTabs" icon="delete.png"></savetabs-list-item>
+				<savetabs-list-item id="deleteSavedTabs" icon="delete.png" :save-tabs="saveTabs"></savetabs-list-item>
 			</div>
 		</div>
 	</body>

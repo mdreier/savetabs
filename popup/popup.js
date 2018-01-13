@@ -1,25 +1,69 @@
+/**
+ * Vue Component: List separator.
+ */
 Vue.component('savetabs-separator', {
     template: '<div class="panel-section-separator"></div>',
 });
 
+/**
+ * Vue component: List item. Takes the following properties:
+ * - id: ID of the list item. Also used as a key for the translation.
+ * - icon: Name if the icon to be used. The icon must be placed in the folder icons
+ * - saveTabs: SaveTabs instance.
+ */
 Vue.component('savetabs-list-item', {
-    template: '<div class="panel-list-item">\
+    template: '<div class="panel-list-item" v-on:click="selectItem">\
                  <div class="icon"><img v-bind:src="iconPath" /></div>\
                  <div class="text" id="loadSavedTabs">{{ text }}</div>\
                  <div class="text-shortcut"></div>\
                </div>',
-    props: ['id', 'icon'],
+    props: ['id', 'icon', 'saveTabs'],
     data: function() {
         return {
             text: browser.i18n.getMessage(this.id),
             iconPath: '../icons/' + this.icon
         };
+    },
+    methods: {
+        /**
+         * Handle selection of a list item. Executes a function in the
+         * SaveTabs instance depending on the ID of the selected item.
+         */
+        selectItem: function(event)
+        {
+            if (!this.saveTabs)
+            {
+                console.error("SaveTabs instance is not available");
+                return;
+            }
+            switch (this.id)
+            {
+                case "saveCurrentTab":
+					this.saveTabs.saveCurrentTab();
+					break;
+				case "saveAllTabs":
+                    this.saveTabs.saveAllTabs();
+					break;
+				case "loadSavedTabs":
+                    this.saveTabs.loadTabs();
+					break;
+				case "deleteSavedTabs":
+                    this.saveTabs.deleteTabs();
+                    break;
+                default:
+                    console.warn("Item with unknown ID", this.id, "selected");
+                    break;
+            }
+        }
     }
 })
 
+//Create Vue root instance after document has completed loading
 window.addEventListener('load', function () {
     var vm = new Vue({
-        el: '#popup-content'
+        el: '#popup-content',
+        data: {
+            saveTabs: new SaveTabs()
+        }
     });
-})
-SaveTabs.createHooks(document);
+});
