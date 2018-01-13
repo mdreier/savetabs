@@ -27,3 +27,7 @@ http://creativecommons.org/licenses/by/4.0/ if you have any questions.
 
 Permissions beyond the scope of this license may be available. Contact 
 The Artificial at info@theartificial.nl to request details.
+
+# Vue.js
+
+Vue.js is included under the terms of the [MIT License](vue/LICENSE).
