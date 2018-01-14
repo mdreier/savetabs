@@ -42,5 +42,60 @@
   "noGroupSelected": {
     "message": "Keine Tabgruppe ausgewählt",
     "description": "Error message shown when no tab group is selected during an operation which requires a selected group"
+  },
+
+  "showExpertSettings": {
+    "message": "Erweiterte Optionen anzeigen",
+    "description": "Command to show expert settings in the plugin settings screen"
+  },
+
+  "option.singleTabOverwrite.text": {
+    "message": "Wenn ein einzelnes Tab gesichert wird...",
+    "description": "Option for behavior when storing a single tab"
+  },
+
+  "option.singleTabOverwrite.true": {
+    "message": "bereits gespeicherte Tabs überschreiben",
+    "description": "Overwrite currently stored tabs when storing a single tab"
+  },
+
+  "option.singleTabOverwrite.false": {
+    "message": "zu gespeicherten Tabs hinzufügen",
+    "description": "Append to currently stored tabs when storing a single tab"
+  },
+
+  "option.multiTabOverwrite.text": {
+    "message": "Wenn mehrere Tabs gesichert werden...",
+    "description": "Option for behavior when storing multiple tabs"
+  },
+
+  "option.multiTabOverwrite.true": {
+    "message": "bereits gespeicherte Tabs überschreiben",
+    "description": "Overwrite currently stored tabs when storing multiple tabs"
+  },
+
+  "option.multiTabOverwrite.false": {
+    "message": "zu gespeicherten Tabs hinzufügen",
+    "description": "Append to currently stored tabs when storing multiple tabs"
+  },
+
+  "option.skipUnknownProtocols.text": {
+    "message": "Wenn ein Tab mit einem unbekannten Protokoll gespeichert wird...",
+    "description": "Option for behavior when encountering an unknown protocol"
+  },
+
+  "option.skipUnknownProtocols.description": {
+    "message": "Manche Protokolle können auf Grund von Sicherheitsfunktionen des Browsers nicht wiederhergestellt werden. Dies betrifft die Protokolle <code>chrome:</code>, <code>data:</code>, <code>file:</code>, <code>javascript:</code> sowie einige <code>about:</code> URLs. Diese URLs werden niemals gespeichert.<br /> Diese Einstellung beeinflusst was passiert wenn beim Speichern eine URL angetroffen wird, für die nicht bekannt ist, ob sie wiederhergestellt werden kann. Du kannst wählen, ob das Tab dennoch gespeichert wird (aber vielleicht nicht mehr wiederhergestellt werden kann) oder ob es einfach übersprungen wird (und dadurch ein wenig Speicherplatz gespart wird). Du brauchst diese Einstellung nur wenn du eine Erweiterung installiert hast die Unterstützung für ein neues Protokoll zum Brwoser hinzufügt.<br /> <strong>Hinweis:</strong> Wenn du diese Absätze nicht verstehst, dann lass diese Einstellung einfach auf ihrem Vorgabewert (überspringen).",
+    "description": "Description of behavior when encountering an unknown protocol"
+  },
+
+  "option.skipUnknownProtocols.true": {
+    "message": "das Tab überspringen",
+    "description": "Skip tabs with unknown protocols"
+  },
+
+  "option.skipUnknownProtocols.false": {
+    "message": "das Tab speichern",
+    "description": "Store tabs with unknown protocols"
   }
 }
