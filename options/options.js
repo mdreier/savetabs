@@ -183,10 +183,10 @@ Vue.component('savetabs-option-list', {
                             @remove="removeItem"
                         ></savetabs-option-list-item>
                     </ul>
-                    <p>
+                    <p class="browser-style">
                         {{ optionAddItem }}:&nbsp;
                         <input v-model="newItemValue"></input>
-                        <button type="button" v-on:click="createItem">{{ optionAddItemCommand }}</button>
+                        <button type="button" class="browser-style" v-on:click="createItem">{{ optionAddItemCommand }}</button>
                     </p>
                     <p v-if="optionDescription !== ''" v-html="optionDescription"></p>
                 </fieldset>`,
