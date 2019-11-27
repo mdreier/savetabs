@@ -10,7 +10,7 @@
 
     <body>
 
-        <form id="savetabs-options">
+        <form id="savetabs-options" v-on:submit.prevent>
             <savetabs-option-select 
                 option-key="singleTabOverwrite"
                 v-bind:options="options"
@@ -24,6 +24,15 @@
                 v-bind:option-values="[true, false]"
                 v-on:update="valueChanged">
             </savetabs-option-select>
+
+            <savetabs-option-list
+                option-key="tabGroups"
+                option-selected="tabGroupsDefault"
+                v-bind:options="options"
+                v-on:add="valueAdded"
+                v-on:remove="valueRemoved"
+                v-on:update="valueChanged">
+            </savetabs-option-list>
 
             <fieldset>
                 <legend>Tab Groups</legend>

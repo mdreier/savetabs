@@ -49,6 +49,21 @@
     "description": "Command to show expert settings in the plugin settings screen"
   },
 
+  "addItem": {
+    "message": "Add",
+    "description": "Button to add a new item to a list of items in the options"
+  },
+
+  "removeItem": {
+    "message": "remove",
+    "description": "Button to remove an item from a list of items in the options"
+  },
+
+  "SelectItem": {
+    "message": "select",
+    "description": "Button to select an item in a list of items in the options"
+  },
+
   "option.singleTabOverwrite.text": {
     "message": "When storing a single tab...",
     "description": "Option for behavior when storing a single tab"
@@ -97,5 +112,20 @@
   "option.skipUnknownProtocols.false": {
     "message": "store the tab",
     "description": "Store tabs with unknown protocols"
+  },
+
+  "option.tabGroups.text": {
+    "message": "Tab Groups",
+    "description": "Option for managing tab groups"
+  },
+
+  "option.tabGroups.description": {
+    "message": "Use tabe groups to manage multiple groups of tabs. Tab groups are only shown when you create more than one group. You have to have at least one tab group, and one of the groups must be chosen as the default group (marked witha a *).",
+    "description": "Explanatory text for working with tab groups"
+  },
+
+  "option.tabGroups.add": {
+    "message": "New tab group",
+    "description": "Adding a new tab group"
   }
 }

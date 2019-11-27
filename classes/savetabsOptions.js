@@ -5,8 +5,8 @@ const DEFAULT_SETTINGS = {
     singleTabOverwrite: true,
     multiTabOverwrite: true,
     skipUnknownProtocols: true,
-    groups: ["Default"],
-    defaultgroup: "Default"
+    tabGroups: ["Default"],
+    tabGroupsDefault: "Default"
 };
 
 /**
@@ -93,18 +93,18 @@ class SaveTabsOptions
 
     _createTabGroup(groupName)
     {
-        if (this._settings.groups.indexOf(groupName) >= 0)
+        if (this._settings.tabGroups.indexOf(groupName) >= 0)
         {
             return Promise.reject("Group already exists");
         }
-        this._settings.groups.push(groupName);
+        this._settings.tabGroups.push(groupName);
         return this._saveSettings()
             .then(this._updateUI());
     }
 
     _removeTabGroup(groupName)
     {
-        if (this._settings.groups.length <= 1)
+        if (this._settings.tabGroups.length <= 1)
         {
             return Promise.reject("You cannot remove the last tab group");
         }
@@ -112,8 +112,8 @@ class SaveTabsOptions
         {
             return Promise.reject("You cannot remove the default tab group");
         }
-        this._settings.groups = this._settings.groups.filter(elem => elem !== groupName);
-        return Promise.resolve(this._settings.groups);
+        this._settings.tabGroups = this._settings.tabGroups.filter(elem => elem !== groupName);
+        return Promise.resolve(this._settings.tabGroups);
     }
 
     _setGroupError(errortext)

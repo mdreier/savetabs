@@ -57,6 +57,27 @@ let SelectOption = {
     }
 };
 
+let OptionBase = {
+    props: {
+        options: Object, 
+        optionKey: String,
+        expert: {
+            type: Boolean,
+            default: false
+        }
+    },
+    computed: {
+        optionText: function() {
+            //Get translation for the settings title
+            return browser.i18n.getMessage('option.' + this.optionKey + '.text');
+        },
+        optionDescription: function() {
+            //Get translation for the optional settings description.
+            return browser.i18n.getMessage('option.' + this.optionKey + '.description');
+        }
+    }
+};
+
 /**
  * Vue component for setting with multiple options. Props are:
  * - options: Settings object.
@@ -66,14 +87,9 @@ let SelectOption = {
  *           are hidden by default. Default value: false.
  */
 Vue.component('savetabs-option-select', {
+    mixins: [OptionBase],
     props: {
-        options: Object, 
-        optionKey: String, 
         optionValues: Array, 
-        expert: {
-            type: Boolean,
-            default: false
-        }
     },
     template: ' <fieldset v-bind:class="{ expertsetting: expert }">\
                     <legend>{{ optionText }}</legend>\
@@ -86,16 +102,6 @@ Vue.component('savetabs-option-select', {
                     ></savetabs-option-select-option>\
                     <p v-if="optionDescription !== \'\'" v-html="optionDescription"></p>\
                 </fieldset>',
-    computed: {
-        optionText: function() {
-            //Get translation for the settings title
-            return browser.i18n.getMessage('option.' + this.optionKey + '.text');
-        },
-        optionDescription: function() {
-            //Get translation for the optional settings description.
-            return browser.i18n.getMessage('option.' + this.optionKey + '.description');
-        }
-    },
     components: {
         /**
          * Select option component is only used inside the selection group.
@@ -112,6 +118,108 @@ Vue.component('savetabs-option-select', {
         valueChanged: function(optionKey, newValue)
         {
             this.$emit("update", optionKey, newValue);
+        }
+    }
+});
+
+/**
+ * Internal component for an item in a list-type option. Props are:
+ * - options: Settings object.
+ * - optKey: Key of the setting to be handled by this component.
+ * - optValue: Value represented by this item
+ */
+let OptionListItem = {
+    props: {
+        options: Object,
+        optKey: String,
+        optValue: String,
+        optSelectedValue: String
+    },
+    template: ` <li>
+                    {{ optValue }}
+                    <span v-if="optValue === optSelectedValue">*</span>
+                    <a v-if="optValue !== optSelectedValue" v-on:click="$emit('select', optValue)" href="#">({{ optionSelectItemCommand }})</a>
+                    <a v-if="optValue !== optSelectedValue" v-on:click="$emit('remove', optValue)" href="#">({{ optionRemoveItemCommand }})</a>
+                </li>`,
+    computed: {
+        optionRemoveItemCommand: function() {
+            //Get translation for the new item button
+            return browser.i18n.getMessage('removeItem');
+        },
+        optionSelectItemCommand: function() {
+            //Get translation for the new item button
+            return browser.i18n.getMessage('selectItem');
+        }
+    }
+};
+
+/**
+ * Vue component for list-type setting. Users can add or remove values. Props are:
+ * - options: Settings object.
+ * - optionKey: Key of the setting to be handled by this component.
+ * - optionSelected: Key of the setting which holds the selected value
+ * - expert: Set to true to mark as an expert setting. Expert settings 
+ *           are hidden by default. Default value: false.
+ */
+Vue.component('savetabs-option-list', {
+    mixins: [OptionBase],
+    props: {
+        optionSelected: String
+    },
+    data: function() {
+        return {
+            newItemValue: ""
+        }
+    },
+    template: ` <fieldset v-bind:class="{ expertsetting: expert }">
+                    <legend>{{ optionText }}</legend>
+                    <ul class="">
+                        <savetabs-option-list-item v-for="item of options[optionKey]" 
+                            :options="options"
+                            :opt-key="optionKey"
+                            :opt-value="item"
+                            :opt-selected-value="optionSelectedValue"
+                            @select="selectItem"
+                            @remove="removeItem"
+                        ></savetabs-option-list-item>
+                    </ul>
+                    <p>
+                        {{ optionAddItem }}:&nbsp;
+                        <input v-model="newItemValue"></input>
+                        <button type="button" v-on:click="createItem">{{ optionAddItemCommand }}</button>
+                    </p>
+                    <p v-if="optionDescription !== ''" v-html="optionDescription"></p>
+                </fieldset>`,
+    components: {
+        /**
+         * List item is only used inside the list.
+         */
+        'savetabs-option-list-item': OptionListItem
+    },
+    computed: {
+        optionAddItem: function() {
+            //Get translation leading text to new item input field
+            return browser.i18n.getMessage('option.' + this.optionKey + '.add');
+        },
+        optionAddItemCommand: function() {
+            //Get translation for the new item button
+            return browser.i18n.getMessage('addItem');
+        },
+        optionSelectedValue: function() {
+            //Get the selected value
+            return this.options[this.optionSelected];
+        }
+    },
+    methods: {
+        createItem: function() {
+            this.$emit("add", this.optionKey, this.newItemValue)
+            this.newItemValue = "";
+        },
+        selectItem: function(newSelectedValue) {
+            this.$emit("update", this.optionSelected, newSelectedValue);
+        },
+        removeItem: function(removedValue) {
+            this.$emit("remove", this.optionKey, removedValue);
         }
     }
 });
@@ -141,6 +249,30 @@ window.addEventListener('load', function () {
             {
                 this.options[optionKey] = newValue;
                 saveTabsOptions.update(this.options);
+            },
+            /**
+             * A new value has been added to a setting. Triggers saving of the settings.
+             * @param {String} optionKey Key of the setting which was changed.
+             * @param {*} newValue Value that has been added to the setting.
+             */
+            valueAdded: function(optionKey, newValue)
+            {
+                this.options[optionKey].push(newValue);
+                saveTabsOptions.update(this.options);
+            },
+            /**
+             * A value has been removed from a setting. Triggers saving of the settings.
+             * @param {String} optionKey Key of the setting which was changed.
+             * @param {*} oldValue Value that has been removed from the setting.
+             */
+            valueRemoved: function(optionKey, oldValue)
+            {
+                var oldIndex = this.options[optionKey].indexOf(oldValue);
+                if (oldIndex >= 0)
+                {
+                    this.options[optionKey].splice(oldIndex, 1);
+                    saveTabsOptions.update(this.options);
+                }
             }
         },
         /**
