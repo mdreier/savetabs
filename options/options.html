@@ -34,41 +34,6 @@
                 v-on:update="valueChanged">
             </savetabs-option-list>
 
-            <fieldset>
-                <legend>Tab Groups</legend>
-
-                <p>
-                    Use tab groups to store multiple sets of tabs. Tab groups are only shown on the UI
-                    if more than one group is defined.
-                    <br />
-                    You must have at least one tab group and one tab group must be marked as the default
-                    tab group.
-                </p>
-
-                <select id="stsetting-tabgroups" size="5">
-                </select>
-
-                <p>* marks the default tab group</p>
-
-                <p id="grouperror"></p>
-
-                <div id="groupcontrols">
-                    <button id="addgroup">Add group...</button>
-                    <button id="setdefaultgroup">Set as default</button>
-                    <button id="deletegroup">Delete group</button>
-                </div>
-
-                <div id="addgroupdata">
-                    <p>Name of the new group:
-                        <input id="groupname">
-                        <span>
-                            <button id="savegroup">Save</button>
-                            <button id="canceladdgroup">Cancel</button>
-                        </span>
-                    </p>
-                </div>
-            </fieldset>
-
             <div 
                 v-if="!showExpertSettings"
                 v-on:click="showExpertSettings = true"
