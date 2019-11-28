@@ -39,7 +39,8 @@ class SaveTabsOptions
     update(newSettings)
     {
         return this._updateSettings(newSettings)
-            .then(() => this._saveSettings())
+            .then(() => this._cloneSettings())
+            .then((settings) => this._saveSettings(settings))
             .catch(e => this._handleError("Error storing settings", e));
     }
 
@@ -55,9 +56,9 @@ class SaveTabsOptions
     /**
      * Save the settings to local storage.
      */
-    _saveSettings()
+    _saveSettings(newSettings)
     {
-        return browser.storage.local.set({settings: this._settings})
+        return browser.storage.local.set({settings: newSettings})
             .then(() => console.log("Settings saved"))
             .catch(e => this._handleError("Saving settings failed", e));
     }
@@ -105,5 +106,22 @@ class SaveTabsOptions
         {
             console.debug(error);
         }
+    }
+
+    /**
+     * Make a shallow clone of the settings as the inner settings object has been
+     * enhanced by Vue.js and cannot be stored in the settings.
+     */
+    _cloneSettings()
+    {
+        let clone = {};
+        for (let prop in this._settings)
+        {
+            if (this._settings.hasOwnProperty(prop))
+            {
+                clone[prop] = this._settings[prop];
+            }
+        }
+        return clone;
     }
 }
