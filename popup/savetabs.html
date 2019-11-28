@@ -2,36 +2,31 @@
 	<head>
 		<meta charset="utf-8">
 		
+		<link rel="stylesheet" href="popup.css">
+
+		<script src="../vue/vue.js" type="text/javascript"></script>
 		<script src="../classes/savetabs.js" type="text/javascript"></script>
-		<script src="../classes/translator.js" type="text/javascript"></script>
 		<script src="./popup.js" type="text/javascript"></script>
 	</head>
 
 	<body>
 		<div id="popup-content" class="panel">
 			<div class="panel-section panel-section-list">
-				<div class="panel-list-item">
-					<div class="icon"><img src="../icons/tab.png" /></div>
-					<div class="text" id="saveCurrentTab" data-i18n-key="@@id">Save current tab</div>
-					<div class="text-shortcut"></div>
-				</div>
-				<div class="panel-list-item">
-					<div class="icon"><img src="../icons/tabs.png" /></div>
-					<div class="text" id="saveAllTabs" data-i18n-key="@@id">Save all tabs</div>
-					<div class="text-shortcut"></div>
-				</div>
-				<div class="panel-section-separator"></div>
-				<div class="panel-list-item">
-					<div class="icon"><img src="../icons/restore.png" /></div>
-					<div class="text" id="loadSavedTabs" data-i18n-key="@@id">Load saved tabs</div>
-					<div class="text-shortcut"></div>
-				</div>
-				<div class="panel-section-separator"></div>
-				<div class="panel-list-item">
-					<div class="icon"><img src="../icons/delete.png" /></div>
-					<div class="text" id="deleteSavedTabs" data-i18n-key="@@id">Delete saved tabs</div>
-					<div class="text-shortcut"></div>
-				</div>
+				<savetabs-list-item id="saveCurrentTab" icon="tab.png" :save-tabs="saveTabs"></savetabs-list-item>
+				<savetabs-list-item id="saveAllTabs" icon="tabs.png" :save-tabs="saveTabs"></savetabs-list-item>
+				<savetabs-separator></savetabs-separator>
+				<savetabs-list-item id="loadSavedTabs" icon="restore.png" :save-tabs="saveTabs"></savetabs-list-item>
+				<savetabs-separator></savetabs-separator>
+				<savetabs-list-item id="deleteSavedTabs" icon="delete.png" :save-tabs="saveTabs"></savetabs-list-item>
+				<template v-if="tabGroupsAvailable">
+					<savetabs-separator></savetabs-separator>
+					<savetabs-list-item id="tabGroup" icon="groups.png" :save-tabs="saveTabs">
+						{{ tabGroupMenu }}&nbsp;
+						<select class="browser-style savetabs-panel-content" v-model="selectedTabGroup">
+							<option v-for="tabGroup in tabGroups">{{ tabGroup }}</option>
+						</select>
+					</savetabs-list-item>
+				</template>
 			</div>
 		</div>
 	</body>

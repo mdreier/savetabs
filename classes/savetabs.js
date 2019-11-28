@@ -9,6 +9,16 @@ const SAVED_TABS_KEY = "savedTabs";
 const SETTINGS_KEY = "settings";
 
 /**
+ * Key for the storage version.
+ */
+const STORAGE_VERSION_KEY = "storageVersion";
+
+/**
+ * Current version of the storage format.
+ */
+const CURRENT_STORAGE_VERSION = 2;
+
+/**
  * Priviledged URls which cannot be opened from extensions.
  * See the documentation for <code>createProperties.url</code> in
  * <a href="https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/tabs/create"><code>tabs.create()</code></a>
@@ -55,8 +65,9 @@ class SaveTabs
 	loadTabs()
 	{
 		console.log("Loading tabs");
-		browser.storage.local
-			.get([ SAVED_TABS_KEY, SETTINGS_KEY ])
+		this._loadSettings()
+			.then(() => this._migrateOldStorage())
+			.then(() => this._loadStoredTabs())
 			.then(this._loadUrls.bind(this))
 			.then(() => console.log("Tabs restored"))
 			.then(() => window.close())
@@ -75,36 +86,32 @@ class SaveTabs
 			.then(() => window.close())
 			.catch(this._handleError);
 	}
-	
+
 	/**
-	 * Create an event handler for the SaveTabs popup. The event handler reacts to clicks on the specified controls.
-	 *
-	 * @param {Document} document The current page shown in the popup.
-	 * @param {SaveTabs} saveTabsInstance Instance of <code>SaveTabs</code> to handle the callbacks. Defaults to a new instance.
-	 * @param {string} saveCurrentTabId ID of the control which triggers saving of the current tab.
-	 * @param {string} saveAllTabsId ID of the control which triggers saving of all tabs in the current window.
-	 * @param {string} loadTabsId ID of the control which triggers loading of saved tabs.
-	 * @param {string} deleteSavedTabs ID of the control which triggers deletion of saved tabs.
+	 * Check if tab groups have been set up. This means that more than
+	 * one tab group is configured.
+	 * @returns {Promise} This promise resolves into <code>true</code> or <code>false</code> 
+	 * when tab groups are available or not.
 	 */
-	static createHooks(document, saveTabsInstance = new SaveTabs(), saveCurrentTabId = "saveCurrentTab", saveAllTabsId = "saveAllTabs", loadTabsId = "loadSavedTabs", deleteTabsId = "deleteSavedTabs")
+	getTabGroups()
 	{
-		document.addEventListener("click", (e) => {
-			switch (e.target.id)
-			{
-				case saveCurrentTabId:
-					saveTabsInstance.saveCurrentTab();
-					break;
-				case saveAllTabsId:
-					saveTabsInstance.saveAllTabs();
-					break;
-				case loadTabsId:
-					saveTabsInstance.loadTabs();
-					break;
-				case deleteTabsId:
-					saveTabsInstance.deleteTabs();
-					break;
-			}
-		});
+		return this._loadSettings()
+			.then(() => this._settings.tabGroups);
+	}
+
+	getSelectedTabGroup()
+	{
+		return this._loadSettings()
+			//Load selected tab group
+			.then(() => this._settings.selectedTabGroup)
+			//Choose first tab group if none has been selected
+			.then(selectedTabGroup => selectedTabGroup ? selectedTabGroup : this._settings.tabGroups[0]);
+	}
+
+	setSelectedTabGroup(selectedTabGroup)
+	{
+		this._settings.selectedTabGroup = selectedTabGroup;
+		this._saveSettings();
 	}
 
 	/**
@@ -120,7 +127,7 @@ class SaveTabs
 			.then(this._collectUrls.bind(this))
 			.then(this._addStoredUrls.bind(this))
 			.then(urls => urls.filter((elem, index, arr) => arr.indexOf(elem) == index)) //remove duplicate URLs
-			.then(this._storeUrls)
+			.then(urls => this._storeUrls(urls))
 			.then(() => console.log("Tabs saved"))
 			.then(() => window.close())
 			.catch(this._handleError);
@@ -167,8 +174,9 @@ class SaveTabs
 			{
 				//Overwriting is not active, read and combine currently stored
 				// tabs before saving.
-				return browser.storage.local.get([SAVED_TABS_KEY])
-					.then(data => data[SAVED_TABS_KEY] && Array.isArray(data[SAVED_TABS_KEY]) ? data[SAVED_TABS_KEY] : [])
+				let key = this._computeStorageKey();
+				return browser.storage.local.get(key)
+					.then(data => data[key] && Array.isArray(data[key]) ? data[key] : [])
 					.then(savedUrls => savedUrls.concat(urls));
 			}
 		}
@@ -189,7 +197,7 @@ class SaveTabs
 		if (Array.isArray(urls) && urls.length > 0)
 		{
 			return browser.storage.local.set({
-				[SAVED_TABS_KEY]: urls
+				[this._computeStorageKey()]: urls
 			});
 		} else {
 			return Promise.reject("No tabs selected for saving");
@@ -197,19 +205,86 @@ class SaveTabs
 	}
 	
 	/**
+	 * Load the stored tabs for the currently selected tab group.
+	 * @returns {Promise} Array containing the stored URLs.
+	 */
+	_loadStoredTabs()
+	{
+		let key = this._computeStorageKey();
+		return browser.storage.local.get(key)
+			.then(data => data[key]);
+	}
+
+	/**
+	 * Migrate storage to the latest format.
+	 */
+	_migrateOldStorage()
+	{
+		/**
+		 * Migrate the content of the local storage to the current storage format.
+		 * @param {Object} storage The full content of the storage.
+		 */
+		function migrator(storage)
+		{
+			console.log("Migrating storage");
+			if (storage[SAVED_TABS_KEY])
+			{
+				//Old data exists from V1 storage version
+				let key;
+				if (storage[SETTINGS_KEY].tabGroups && Array.isArray(storage[SETTINGS_KEY].tabGroups))
+				{
+					//New tab groups setting exists, choose first tab group
+					key = storage[SETTINGS_KEY].tabGroups[0];
+				} else {
+					//Tab group setting does not exist, create with default tab group
+					key = "Default";
+					storage[SETTINGS_KEY].tabGroups = [key];
+				}
+
+				if (storage[SAVED_TABS_KEY + '-' + key])
+				{
+					//Data already saved under default storage key
+					//Use extension ID as fairly guaranteed unique ID, to avoid need for a UUID implementation
+					key = 'Migration-' + runtime.id
+					storage[SETTINGS_KEY].tabGroups.push(key);
+				}
+
+				storage[SAVED_TABS_KEY + '-' + key] = storage[SAVED_TABS_KEY];
+				storage[STORAGE_VERSION_KEY] = 2;
+				delete storage[SAVED_TABS_KEY];
+			}
+			console.log("Migration completed");
+			return storage;
+		}
+
+		/**
+		 * Migration sequence
+		 * @returns {Promise} Promise is fulfilled without a value when the migration is completed.
+		 */
+		function migrate() {
+			return browser.storage.local.get()
+				.then(data => migrator(data))
+				.then(data => browser.storage.local.set(data))
+				.then(browser.storage.local.remove(SAVED_TABS_KEY));
+		}
+
+		return browser.storage.local.get(STORAGE_VERSION_KEY)
+			.then(data => data[STORAGE_VERSION_KEY] == CURRENT_STORAGE_VERSION ? Promise.resolve() : migrate());
+	}
+
+	/**
 	 * Open URLs saved in storage.
-	 * @param {object} savedTabs Object containing the saved tabs. The tabs must be stored as 
-	 * an array in a property named <code>[SAVED_TABS_KEY]</code>.
+	 * @param {object} savedTabs Array containing the saved tabs.
 	 * @return {Promise} The returned <code>Promise</code> is resolved once all tabs are opened and 
 	 * rejected if no tabs are saved.
 	 */
 	_loadUrls(savedTabs)
 	{
 		return browser.tabs.query({ currentWindow: true }).then( (openTabs) => {
-			if (savedTabs[SAVED_TABS_KEY] && Array.isArray(savedTabs[SAVED_TABS_KEY]))
+			if (savedTabs && Array.isArray(savedTabs))
 			{
 				let newTabPromises = [];
-				for (let url of savedTabs[SAVED_TABS_KEY])
+				for (let url of savedTabs)
 				{
 					if (!this._isOpen(openTabs, url))
 					{
@@ -248,9 +323,16 @@ class SaveTabs
 	 */
 	_loadSettings()
 	{
-		return browser.storage.local.get([SETTINGS_KEY])
+		return browser.storage.local.get(SETTINGS_KEY)
 			.then(data => data[SETTINGS_KEY] ? data[SETTINGS_KEY] : {})
 			.then(settings => this._settings = settings);
+	}
+
+	_saveSettings()
+	{
+		return browser.storage.local.set({
+			[SETTINGS_KEY]: this._settings
+		}).catch(this._handleError);
 	}
 
 	/**
@@ -309,6 +391,20 @@ class SaveTabs
 			//Unknown protocols
 			default:
 				return !this._settings.skipUnknownProtocols;
+		}
+	}
+
+	_computeStorageKey() {
+		let group = this._settings.selectedTabGroup;
+		if (!group && this._settings.tabGroups && Array.isArray(this._settings.tabGroups))
+		{
+			group = this._settings.tabGroups[0];
+		}
+
+		if (group) {
+			return SAVED_TABS_KEY + '-' + group;
+		} else {
+			return SAVED_TABS_KEY;
 		}
 	}
 }

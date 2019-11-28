@@ -32,5 +32,105 @@
   "deleteSavedTabs": {
     "message": "Delete saved tabs",
     "description": "Menu entry to delete all saved tabs from the local storage."
+  },
+
+  "tabGroup": {
+    "message": "Tab Group",
+    "description": "Menu entry to choose the tab group"
+  },
+
+  "enterTabGroupName": {
+    "message": "Enter a name for the tab group",
+    "description": "Error message shown when the name is missing for a new tab group"
+  },
+
+  "noGroupSelected": {
+    "message": "No tab group selected",
+    "description": "Error message shown when no tab group is selected during an operation which requires a selected group"
+  },
+
+  "showExpertSettings": {
+    "message": "Show expert settings",
+    "description": "Command to show expert settings in the plugin settings screen"
+  },
+
+  "addItem": {
+    "message": "Add",
+    "description": "Button to add a new item to a list of items in the options"
+  },
+
+  "removeItem": {
+    "message": "remove",
+    "description": "Button to remove an item from a list of items in the options"
+  },
+
+  "SelectItem": {
+    "message": "select",
+    "description": "Button to select an item in a list of items in the options"
+  },
+
+  "option.singleTabOverwrite.text": {
+    "message": "When storing a single tab...",
+    "description": "Option for behavior when storing a single tab"
+  },
+
+  "option.singleTabOverwrite.true": {
+    "message": "overwrite currently stored tabs",
+    "description": "Overwrite currently stored tabs when storing a single tab"
+  },
+
+  "option.singleTabOverwrite.false": {
+    "message": "append to currently stored tabs",
+    "description": "Append to currently stored tabs when storing a single tab"
+  },
+
+  "option.multiTabOverwrite.text": {
+    "message": "When storing multiple tabs...",
+    "description": "Option for behavior when storing multiple tabs"
+  },
+
+  "option.multiTabOverwrite.true": {
+    "message": "overwrite currently stored tabs",
+    "description": "Overwrite currently stored tabs when storing multiple tabs"
+  },
+
+  "option.multiTabOverwrite.false": {
+    "message": "append to currently stored tabs",
+    "description": "Append to currently stored tabs when storing multiple tabs"
+  },
+
+  "option.skipUnknownProtocols.text": {
+    "message": "When storing a tab with an unknown protocol...",
+    "description": "Option for behavior when encountering an unknown protocol"
+  },
+
+  "option.skipUnknownProtocols.description": {
+    "message": "Some protocols cannot be restored from saved tabs due to browser restrictions. This includes <code>chrome:</code>, <code>data:</code>, <code>file:</code>, <code>javascript:</code> and some <code>about:</code> URLs. These URLs are never stored.<br /> This setting controls what the addon will do when it encounters a URL for which it does not know wether it can be restored or not. You can choose to store the tab anyways (but it could be that it is not restored) or you can choose to skip the tab while saving (and thereby saving some storage space). You only need this setting when you have installed an extension which adds support for a new protocol.<br /> <strong>Hint:</strong> If you do not understand the previous paragraphs, just keep the setting on its default value (skip).",
+    "description": "Description of behavior when encountering an unknown protocol"
+  },
+
+  "option.skipUnknownProtocols.true": {
+    "message": "skip the tab",
+    "description": "Skip tabs with unknown protocols"
+  },
+
+  "option.skipUnknownProtocols.false": {
+    "message": "store the tab",
+    "description": "Store tabs with unknown protocols"
+  },
+
+  "option.tabGroups.text": {
+    "message": "Tab Groups",
+    "description": "Option for managing tab groups"
+  },
+
+  "option.tabGroups.description": {
+    "message": "Use tabe groups to manage multiple groups of tabs. Tab groups are only shown when you create more than one group. You have to have at least one tab group, and one of the groups must be chosen as the default group (marked witha a *).",
+    "description": "Explanatory text for working with tab groups"
+  },
+
+  "option.tabGroups.add": {
+    "message": "New tab group",
+    "description": "Adding a new tab group"
   }
 }
