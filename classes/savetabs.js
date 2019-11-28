@@ -227,6 +227,11 @@ class SaveTabs
 		function migrator(storage)
 		{
 			console.log("Migrating storage");
+			if (!storage[SETTINGS_KEY])
+			{
+				//Settings data is missing, upgrade or new install
+				storage[SETTINGS_KEY] = {};
+			}
 			if (storage[SAVED_TABS_KEY])
 			{
 				//Old data exists from V1 storage version
