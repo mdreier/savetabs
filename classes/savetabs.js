@@ -174,8 +174,9 @@ class SaveTabs
 			{
 				//Overwriting is not active, read and combine currently stored
 				// tabs before saving.
-				return browser.storage.local.get([SAVED_TABS_KEY])
-					.then(data => data[SAVED_TABS_KEY] && Array.isArray(data[SAVED_TABS_KEY]) ? data[SAVED_TABS_KEY] : [])
+				let key = this._computeStorageKey();
+				return browser.storage.local.get(key)
+					.then(data => data[key] && Array.isArray(data[key]) ? data[key] : [])
 					.then(savedUrls => savedUrls.concat(urls));
 			}
 		}
