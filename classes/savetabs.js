@@ -105,7 +105,7 @@ class SaveTabs
 			//Load selected tab group
 			.then(() => this._settings.selectedTabGroup)
 			//Choose first tab group if none has been selected
-			.then(selectedTabGroup => selectedTabGroup ? selectedTabGroup : this._settings.tabGroups[0]);
+			.then(selectedTabGroup => selectedTabGroup ? selectedTabGroup : this._settings.tabGroups ? this._settings.tabGroups[0] : undefined);
 	}
 
 	setSelectedTabGroup(selectedTabGroup)
