@@ -29,8 +29,8 @@
                 option-key="tabGroups"
                 option-selected="tabGroupsDefault"
                 v-bind:options="options"
-                v-on:add="valueAdded"
-                v-on:remove="valueRemoved"
+                v-on:add="tabGroupAdded"
+                v-on:remove="tabGroupRemoved"
                 v-on:update="valueChanged">
             </savetabs-option-list>
 

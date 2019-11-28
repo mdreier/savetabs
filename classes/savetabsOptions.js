@@ -45,6 +45,18 @@ class SaveTabsOptions
     }
 
     /**
+     * Remove stored data for a tab group.
+     * @param {String} tabGroup Name of the tab group
+     */
+    removeStoredTabGroupData(tabGroup)
+    {
+        if (tabGroup)
+        {
+            browser.storage.local.remove("savedTabs-" + tabGroup);
+        }
+    }
+
+    /**
      * Update all settings from the current UI state.
      */
     _updateSettings(newSettings)

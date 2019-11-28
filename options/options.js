@@ -255,7 +255,7 @@ window.addEventListener('load', function () {
              * @param {String} optionKey Key of the setting which was changed.
              * @param {*} newValue Value that has been added to the setting.
              */
-            valueAdded: function(optionKey, newValue)
+            tabGroupAdded: function(optionKey, newValue)
             {
                 this.options[optionKey].push(newValue);
                 saveTabsOptions.update(this.options);
@@ -265,14 +265,19 @@ window.addEventListener('load', function () {
              * @param {String} optionKey Key of the setting which was changed.
              * @param {*} oldValue Value that has been removed from the setting.
              */
-            valueRemoved: function(optionKey, oldValue)
+            tabGroupRemoved: function(optionKey, oldValue)
             {
                 var oldIndex = this.options[optionKey].indexOf(oldValue);
                 if (oldIndex >= 0)
                 {
                     this.options[optionKey].splice(oldIndex, 1);
+                    if (this.options.selectedTabGroup === oldValue)
+                    {
+                        this.options.selectedTabGroup = this.options[optionKey][0];
+                    }
                     saveTabsOptions.update(this.options);
                 }
+                saveTabsOptions.removeStoredTabGroupData(oldValue)
             }
         },
         /**
