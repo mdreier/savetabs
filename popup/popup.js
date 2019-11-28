@@ -14,7 +14,7 @@ Vue.component('savetabs-separator', {
 Vue.component('savetabs-list-item', {
     template: '<div class="panel-list-item" v-on:click="selectItem">\
                  <div class="icon"><img v-bind:src="iconPath" /></div>\
-                 <div class="text" id="loadSavedTabs">{{ text }}</div>\
+                 <slot><div class="text" id="loadSavedTabs">{{ text }}</div></slot>\
                  <div class="text-shortcut"></div>\
                </div>',
     props: ['id', 'icon', 'saveTabs'],
@@ -60,10 +60,33 @@ Vue.component('savetabs-list-item', {
 
 //Create Vue root instance after document has completed loading
 window.addEventListener('load', function () {
+    let saveTabs = new SaveTabs(); 
+
     var vm = new Vue({
         el: '#popup-content',
         data: {
-            saveTabs: new SaveTabs()
+            saveTabs: saveTabs,
+            tabGroups: [],
+            tabGroupMenu: browser.i18n.getMessage('tabGroup'),
+            selectedTabGroupName: ""
+        },
+        computed: {
+            tabGroupsAvailable: function() {
+                return this.tabGroups && Array.isArray(this.tabGroups) && this.tabGroups.length > 1
+            },
+            selectedTabGroup: {
+                get() {
+                    return this.selectedTabGroupName;
+                },
+                set(selectedTabGroup) {
+                    this.saveTabs.setSelectedTabGroup(selectedTabGroup);
+                }
+            }
         }
     });
+    
+    saveTabs.getTabGroups()
+        .then(tabGroups => vm.$data.tabGroups = tabGroups);
+    saveTabs.getSelectedTabGroup()
+        .then(selectedTabGroup => vm.$data.selectedTabGroupName = selectedTabGroup);
 });

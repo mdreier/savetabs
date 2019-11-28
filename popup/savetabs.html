@@ -2,6 +2,8 @@
 	<head>
 		<meta charset="utf-8">
 		
+		<link rel="stylesheet" href="popup.css">
+
 		<script src="../vue/vue.js" type="text/javascript"></script>
 		<script src="../classes/savetabs.js" type="text/javascript"></script>
 		<script src="./popup.js" type="text/javascript"></script>
@@ -16,6 +18,15 @@
 				<savetabs-list-item id="loadSavedTabs" icon="restore.png" :save-tabs="saveTabs"></savetabs-list-item>
 				<savetabs-separator></savetabs-separator>
 				<savetabs-list-item id="deleteSavedTabs" icon="delete.png" :save-tabs="saveTabs"></savetabs-list-item>
+				<template v-if="tabGroupsAvailable">
+					<savetabs-separator></savetabs-separator>
+					<savetabs-list-item id="tabGroup" icon="groups.png" :save-tabs="saveTabs">
+						{{ tabGroupMenu }}&nbsp;
+						<select class="browser-style savetabs-panel-content" v-model="selectedTabGroup">
+							<option v-for="tabGroup in tabGroups">{{ tabGroup }}</option>
+						</select>
+					</savetabs-list-item>
+				</template>
 			</div>
 		</div>
 	</body>

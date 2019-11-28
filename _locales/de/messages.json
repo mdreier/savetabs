@@ -34,6 +34,11 @@
     "description": "Menu entry to delete all saved tabs from the local storage."
   },
 
+  "tabGroup": {
+    "message": "Tabgruppe",
+    "description": "Menu entry to choose the tab group"
+  },
+
   "enterTabGroupName": {
     "message": "Gib einen Namen für die neue Tabgruppe ein",
     "description": "Error message shown when the name is missing for a new tab group"
