@@ -1,2 +1,5 @@
 # Ignore development version of Vue.js
 vue/vue.js
+
+# Ignore build results
+web-ext-artifacts/
