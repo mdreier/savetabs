@@ -3,10 +3,10 @@
   "version": "1.2.2",
   "description": "A Firefox plugin to save and restore open tabs",
   "scripts": {
-    "start": "web-ext run -i vue/vue.min.js",
+    "start": "node ./scripts/start.js",
     "prepack": "web-ext lint",
-    "build": "web-ext lint && web-ext build --overwrite-dest",
-    "postinstall": "mkdir -p vue && cp node_modules/vue/LICENSE vue/ && cp node_modules/vue/dist/vue.min.js vue/",
+    "build": "node ./scripts/build.js",
+    "postinstall": "node ./scripts/copyVue.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
