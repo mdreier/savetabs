@@ -1,5 +1,5 @@
-# Ignore development version of Vue.js
-vue/vue.js
+# Ignore Vue.js dependencies (managed via npm install)
+vue/
 
 # Ignore build results
 web-ext-artifacts/

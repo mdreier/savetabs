@@ -3,9 +3,10 @@
   "version": "1.2.2",
   "description": "A Firefox plugin to save and restore open tabs",
   "scripts": {
-    "start": "web-ext run",
+    "start": "web-ext run -i vue/vue.min.js",
     "prepack": "web-ext lint",
-    "build": " && web-ext build",
+    "build": "web-ext lint && web-ext build",
+    "postinstall": "mkdir -p vue && cp node_modules/vue/LICENSE vue/ && cp node_modules/vue/dist/vue.min.js vue/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,5 +21,8 @@
   "homepage": "https://addons.mozilla.org/de/firefox/addon/savetabs/",
   "devDependencies": {
     "web-ext": "^4.0.0"
+  },
+  "dependencies": {
+    "vue": "^2.6.11"
   }
 }
