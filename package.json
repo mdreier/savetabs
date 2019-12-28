@@ -5,7 +5,7 @@
   "scripts": {
     "start": "web-ext run -i vue/vue.min.js",
     "prepack": "web-ext lint",
-    "build": "web-ext lint && web-ext build",
+    "build": "web-ext lint && web-ext build --overwrite-dest",
     "postinstall": "mkdir -p vue && cp node_modules/vue/LICENSE vue/ && cp node_modules/vue/dist/vue.min.js vue/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
