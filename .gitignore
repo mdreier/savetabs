@@ -3,3 +3,6 @@ vue/vue.js
 
 # Ignore build results
 web-ext-artifacts/
+
+# Ignore npm dependencies folder
+node_modules
