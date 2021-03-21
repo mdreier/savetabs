@@ -1,19 +1,14 @@
 /**
  * Default settings.
  */
-const DEFAULT_SETTINGS = {
-    singleTabOverwrite: true,
-    multiTabOverwrite: true,
-    skipUnknownProtocols: true,
-    tabGroups: ["Default"],
-    tabGroupsDefault: "Default"
-};
+import DEFAULT_SETTINGS from "./defaultSettings.js"
+
 
 /**
  * Class to handle loading and saving options for the
  * Save Tabs extension.
  */
-class SaveTabsOptions
+export default class SaveTabsOptions
 {
 
     /**

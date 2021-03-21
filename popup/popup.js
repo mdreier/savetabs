@@ -1,3 +1,5 @@
+import SaveTabs from "../classes/savetabs.js"
+
 /**
  * Vue Component: List separator.
  */

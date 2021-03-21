@@ -1,3 +1,4 @@
+import SaveTabsOptions from "../classes/savetabsOptions.js"
 /**
  * Vue component: Single option value for select-type value. Props:
  * - options: SaveTabsOptions instance.
