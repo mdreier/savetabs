@@ -91,8 +91,8 @@ class SaveTabs
 	deleteTabs()
 	{
 		console.log("Deleting tabs");
-		browser.storage.local
-			.remove([ SAVED_TABS_KEY ])
+			this._loadSettings()
+			.then(browser.storage.local.remove(this._computeStorageKey()))
 			.then(() => console.log("Tabs deleted"))
 			.then(() => window.close())
 			.catch(this._handleError);
@@ -274,7 +274,7 @@ class SaveTabs
 		}
 
 		return browser.storage.local.get(STORAGE_VERSION_KEY)
-			.then(data => data[STORAGE_VERSION_KEY] === CURRENT_STORAGE_VERSION ? Promise.resolve() : migrate());
+			.then(data => data[STORAGE_VERSION_KEY] === CURRENT_STORAGE_VERSION ? Promise.resolve() : migrate.call(this));
 	}
 
 	/**
