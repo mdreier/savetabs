@@ -1,4 +1,15 @@
 /**
+ * Default settings.
+ */
+ const DEFAULT_SETTINGS = {
+    singleTabOverwrite: true,
+    multiTabOverwrite: true,
+    skipUnknownProtocols: true,
+    tabGroups: ["Default"],
+    tabGroupsDefault: "Default"
+};
+
+/**
  * Key for array of saved tabs in local storage.
  */
 const SAVED_TABS_KEY = "savedTabs";
@@ -227,37 +238,25 @@ class SaveTabs
 		function migrator(storage)
 		{
 			console.log("Migrating storage");
-			if (!storage[SETTINGS_KEY])
-			{
-				//Settings data is missing, upgrade or new install
-				storage[SETTINGS_KEY] = {};
-			}
+
 			if (storage[SAVED_TABS_KEY])
 			{
 				//Old data exists from V1 storage version
-				let key;
-				if (storage[SETTINGS_KEY].tabGroups && Array.isArray(storage[SETTINGS_KEY].tabGroups))
-				{
-					//New tab groups setting exists, choose first tab group
-					key = storage[SETTINGS_KEY].tabGroups[0];
-				} else {
-					//Tab group setting does not exist, create with default tab group
-					key = "Default";
-					storage[SETTINGS_KEY].tabGroups = [key];
-				}
+				let key = this._settings.tabGroups[0];
+				let existingData = storage[SAVED_TABS_KEY + '-' + key];
 
-				if (storage[SAVED_TABS_KEY + '-' + key])
+				if (existingData && Arrays.isArray(existingData) && existingData.length > 0)
 				{
 					//Data already saved under default storage key
 					//Use extension ID as fairly guaranteed unique ID, to avoid need for a UUID implementation
 					key = 'Migration-' + runtime.id
-					storage[SETTINGS_KEY].tabGroups.push(key);
+					this._settings.tabGroups.push(key);
 				}
 
 				storage[SAVED_TABS_KEY + '-' + key] = storage[SAVED_TABS_KEY];
-				storage[STORAGE_VERSION_KEY] = 2;
 				delete storage[SAVED_TABS_KEY];
 			}
+			storage[STORAGE_VERSION_KEY] = 2;
 			console.log("Migration completed");
 			return storage;
 		}
@@ -270,11 +269,12 @@ class SaveTabs
 			return browser.storage.local.get()
 				.then(data => migrator(data))
 				.then(data => browser.storage.local.set(data))
-				.then(browser.storage.local.remove(SAVED_TABS_KEY));
+				.then(browser.storage.local.remove(SAVED_TABS_KEY))
+				.then(this._saveSettings());
 		}
 
 		return browser.storage.local.get(STORAGE_VERSION_KEY)
-			.then(data => data[STORAGE_VERSION_KEY] == CURRENT_STORAGE_VERSION ? Promise.resolve() : migrate());
+			.then(data => data[STORAGE_VERSION_KEY] === CURRENT_STORAGE_VERSION ? Promise.resolve() : migrate());
 	}
 
 	/**
@@ -329,7 +329,7 @@ class SaveTabs
 	_loadSettings()
 	{
 		return browser.storage.local.get(SETTINGS_KEY)
-			.then(data => data[SETTINGS_KEY] ? data[SETTINGS_KEY] : {})
+			.then(data => data[SETTINGS_KEY] ? data[SETTINGS_KEY] : DEFAULT_SETTINGS)
 			.then(settings => this._settings = settings);
 	}
 
