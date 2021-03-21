@@ -268,7 +268,8 @@ export default class SaveTabs
 		}
 
 		return browser.storage.local.get(STORAGE_VERSION_KEY)
-			.then(data => data[STORAGE_VERSION_KEY] === CURRENT_STORAGE_VERSION ? Promise.resolve() : migrate.call(this));
+			.then(data => data[STORAGE_VERSION_KEY] === CURRENT_STORAGE_VERSION ? Promise.resolve() : migrate.call(this))
+			.then(browser.storage.local.remove(SAVED_TABS_KEY));
 	}
 
 	/**
