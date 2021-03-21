@@ -1,13 +1,7 @@
 /**
  * Default settings.
  */
- const DEFAULT_SETTINGS = {
-    singleTabOverwrite: true,
-    multiTabOverwrite: true,
-    skipUnknownProtocols: true,
-    tabGroups: ["Default"],
-    tabGroupsDefault: "Default"
-};
+import DEFAULT_SETTINGS from "./defaultSettings.js"
 
 /**
  * Key for array of saved tabs in local storage.
@@ -47,7 +41,7 @@ const NON_SAVEABLE_URLS = [
 /**
  * Class to handle saving and storing of tabs.
  */
-class SaveTabs
+export default class SaveTabs
 {
 	/**
 	 * Save all tabs in the current window.
