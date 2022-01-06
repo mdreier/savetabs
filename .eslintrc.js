@@ -2,12 +2,14 @@ module.exports = {
   root: true,
 
   env: {
-    node: true
+    node: true,
+    webextensions: true
   },
 
   extends: [
     'plugin:vue/vue3-essential',
-    '@vue/standard'
+    '@vue/standard',
+    '@vue/typescript'
   ],
 
   parserOptions: {
@@ -17,11 +19,5 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
-  },
-
-  extends: [
-    'plugin:vue/vue3-essential',
-    '@vue/standard',
-    '@vue/typescript'
-  ]
+  }
 }
