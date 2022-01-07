@@ -1,8 +1,8 @@
 /**
  * Default settings.
  */
-import DEFAULT_SETTINGS from "./defaultSettings.js"
-import SaveTabsSettings from "./settings.js";
+import DEFAULT_SETTINGS from "./defaultSettings"
+import SaveTabsSettings from "./settings";
 
 interface SaveTabsSettingsClone {
     [key: string]: any
