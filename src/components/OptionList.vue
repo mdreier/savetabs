@@ -25,40 +25,44 @@
 </template>
 
 <script lang="ts">
-import SaveTabsSettings from "@/classes/settings";
-import { Options } from "vue-class-component";
-import OptionBase from "./OptionBase.vue";
+import SaveTabsSettings from '@/classes/settings'
+import { Options } from 'vue-class-component'
+import OptionBase from './OptionBase.vue'
 
 @Options({
-  name: "savetabs-option-list",
+  name: 'savetabs-option-list'
 })
 export default class OptionList extends OptionBase {
   optionSelected!: keyof SaveTabsSettings;
 
-  newItemValue: string = "";
+  newItemValue: string = '';
 
   get optionAddItem() {
-    //Get translation leading text to new item input field
-    return browser.i18n.getMessage("option." + this.optionKey + ".add");
+    // Get translation leading text to new item input field
+    return browser.i18n.getMessage('option.' + this.optionKey + '.add')
   }
+
   get optionAddItemCommand() {
-    //Get translation for the new item button
-    return browser.i18n.getMessage("addItem");
+    // Get translation for the new item button
+    return browser.i18n.getMessage('addItem')
   }
+
   get optionSelectedValue() {
-    //Get the selected value
-    return this.options[this.optionSelected];
+    // Get the selected value
+    return this.options[this.optionSelected]
   }
 
   createItem() {
-    this.$emit("add", this.optionKey, this.newItemValue);
-    this.newItemValue = "";
+    this.$emit('add', this.optionKey, this.newItemValue)
+    this.newItemValue = ''
   }
+
   selectItem(newSelectedValue: any) {
-    this.$emit("update", this.optionSelected, newSelectedValue);
+    this.$emit('update', this.optionSelected, newSelectedValue)
   }
+
   removeItem(removedValue: any) {
-    this.$emit("remove", this.optionKey, removedValue);
+    this.$emit('remove', this.optionKey, removedValue)
   }
 }
 </script>

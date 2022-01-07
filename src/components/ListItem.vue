@@ -9,8 +9,8 @@
 </template>
 
 <script lang="ts">
-import SaveTabs from "@/classes/savetabs";
-import { Options, Vue } from "vue-class-component";
+import SaveTabs from '@/classes/savetabs'
+import { Options, Vue } from 'vue-class-component'
 
 @Options({
   name: 'savetabs-list-item'
@@ -22,7 +22,7 @@ export default class ListItem extends Vue {
   saveTabs!: SaveTabs;
 
   get text() {
-    return browser.i18n.getMessage(this.id);
+    return browser.i18n.getMessage(this.id)
   }
 
   get iconPath() {
@@ -31,25 +31,25 @@ export default class ListItem extends Vue {
 
   selectItem() {
     if (!this.saveTabs) {
-      console.error("SaveTabs instance is not available");
-      return;
+      console.error('SaveTabs instance is not available')
+      return
     }
     switch (this.id) {
-      case "saveCurrentTab":
-        this.saveTabs.saveCurrentTab();
-        break;
-      case "saveAllTabs":
-        this.saveTabs.saveAllTabs();
-        break;
-      case "loadSavedTabs":
-        this.saveTabs.loadTabs();
-        break;
-      case "deleteSavedTabs":
-        this.saveTabs.deleteTabs();
-        break;
+      case 'saveCurrentTab':
+        this.saveTabs.saveCurrentTab()
+        break
+      case 'saveAllTabs':
+        this.saveTabs.saveAllTabs()
+        break
+      case 'loadSavedTabs':
+        this.saveTabs.loadTabs()
+        break
+      case 'deleteSavedTabs':
+        this.saveTabs.deleteTabs()
+        break
       default:
-        console.warn("Item with unknown ID", this.id, "selected");
-        break;
+        console.warn('Item with unknown ID', this.id, 'selected')
+        break
     }
   }
 }

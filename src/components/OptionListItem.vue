@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { Options, Vue } from 'vue-class-component'
 
 /**
  * Internal component for an item in a list-type option. Props are:
@@ -27,17 +27,17 @@ import { Options, Vue } from "vue-class-component";
  * - optValue: Value represented by this item
  */
 @Options({
-    name: 'savetabs-option-list-item'
+  name: 'savetabs-option-list-item'
 })
 export default class OptionListItem extends Vue {
   optionRemoveItemCommand() {
-    //Get translation for the remove item button
-    return browser.i18n.getMessage("removeItem");
+    // Get translation for the remove item button
+    return browser.i18n.getMessage('removeItem')
   }
 
   optionSelectItemCommand() {
-    //Get translation for the select item button
-    return browser.i18n.getMessage("selectItem");
+    // Get translation for the select item button
+    return browser.i18n.getMessage('selectItem')
   }
 }
 </script>

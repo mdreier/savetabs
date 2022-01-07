@@ -42,12 +42,11 @@
 </template>
 
 <script lang="ts">
-import SaveTabsOptions from "@/classes/savetabsOptions";
-import SaveTabsSettings from "@/classes/settings";
-import { isRef } from "@vue/reactivity";
-import { Vue } from "vue-class-component";
+import SaveTabsOptions from '@/classes/savetabsOptions'
+import SaveTabsSettings from '@/classes/settings'
+import { Vue } from 'vue-class-component'
 
-let saveTabsOptions = new SaveTabsOptions();
+const saveTabsOptions = new SaveTabsOptions()
 
 export default class App extends Vue {
   /**
@@ -63,7 +62,7 @@ export default class App extends Vue {
   /**
    * Message for the button to show expert settings
    */
-  showExpertSettingsText = browser.i18n.getMessage("showExpertSettings");
+  showExpertSettingsText = browser.i18n.getMessage('showExpertSettings');
 
   /**
    * Value of a setting has been changed. Triggers saving of the settings.
@@ -71,10 +70,11 @@ export default class App extends Vue {
    * @param {*} newValue New value of the setting.
    */
   valueChanged(optionKey: keyof SaveTabsSettings, newValue: any) {
-    //Typecast to make TypeScript compiler happy
-    (this.options as any)[optionKey] = newValue;
-    saveTabsOptions.update(this.options);
+    // Typecast to make TypeScript compiler happy
+    (this.options as any)[optionKey] = newValue
+    saveTabsOptions.update(this.options)
   }
+
   /**
    * A new value has been added to a setting. Triggers saving of the settings.
    * @param {String} optionKey Key of the setting which was changed.
@@ -82,25 +82,26 @@ export default class App extends Vue {
    */
   tabGroupAdded(optionKey: 'tabGroups', newValue: any) {
     if (this.options[optionKey]) {
-      this.options[optionKey].push(newValue);
+      this.options[optionKey].push(newValue)
     }
-    saveTabsOptions.update(this.options);
+    saveTabsOptions.update(this.options)
   }
+
   /**
    * A value has been removed from a setting. Triggers saving of the settings.
    * @param {String} optionKey Key of the setting which was changed.
    * @param {*} oldValue Value that has been removed from the setting.
    */
   tabGroupRemoved(optionKey: 'tabGroups', oldValue: any) {
-    var oldIndex = this.options[optionKey].indexOf(oldValue);
+    var oldIndex = this.options[optionKey].indexOf(oldValue)
     if (oldIndex >= 0) {
-      this.options[optionKey].splice(oldIndex, 1);
+      this.options[optionKey].splice(oldIndex, 1)
       if (this.options.selectedTabGroup === oldValue) {
-        this.options.selectedTabGroup = this.options[optionKey][0];
+        this.options.selectedTabGroup = this.options[optionKey][0]
       }
-      saveTabsOptions.update(this.options);
+      saveTabsOptions.update(this.options)
     }
-    saveTabsOptions.removeStoredTabGroupData(oldValue);
+    saveTabsOptions.removeStoredTabGroupData(oldValue)
   }
 
   /**
@@ -108,7 +109,7 @@ export default class App extends Vue {
    * has been initialized.
    */
   created() {
-    saveTabsOptions.restore().then((options) => {if (options) {this.options = options}});
+    saveTabsOptions.restore().then((options) => { if (options) { this.options = options } })
   }
 }
 </script>

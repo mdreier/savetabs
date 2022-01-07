@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { Options, Vue } from 'vue-class-component'
 
 /**
  * Vue component: Single option value for select-type value. Props:
@@ -31,23 +31,26 @@ export default class SelectOption extends Vue {
   optValue: any;
 
   get optionName() {
-    //Name is the same for all radio buttons for the same option (radio group)
-    return "stsetting-" + this.optKey;
+    // Name is the same for all radio buttons for the same option (radio group)
+    return 'stsetting-' + this.optKey
   }
+
   get optionId() {
-    //ID is unique for each value
-    return "stsetting-" + this.optKey + "-" + this.optValue;
+    // ID is unique for each value
+    return 'stsetting-' + this.optKey + '-' + this.optValue
   }
+
   get optionText() {
-    //Get the translation for this value
+    // Get the translation for this value
     return browser.i18n.getMessage(
-      "option." + this.optKey + "." + this.optValue
-    );
+      'option.' + this.optKey + '.' + this.optValue
+    )
   }
+
   get isSelected() {
-    //Radio button is selected if the current option value is the one handled
+    // Radio button is selected if the current option value is the one handled
     // by this input element
-    return this.optValue === this.options[this.optKey];
+    return this.optValue === this.options[this.optKey]
   }
 
   /**
@@ -58,7 +61,7 @@ export default class SelectOption extends Vue {
    */
   optionChanged(isSelected: boolean) {
     if (isSelected) {
-      this.$emit("change", this.optKey, this.optValue);
+      this.$emit('change', this.optKey, this.optValue)
     }
   }
 }
